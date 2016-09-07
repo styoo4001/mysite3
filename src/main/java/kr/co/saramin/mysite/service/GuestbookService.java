@@ -26,6 +26,7 @@ public class GuestbookService {
 	}
 	
 	public boolean insertMessage( GuestbookVo vo ) {
+		System.out.println(vo);
 		return guestbookDao.insert( vo ) == 1;
 	}
 }

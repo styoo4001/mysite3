@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>  
-
+ 
 
 <!doctype html>
 <html>
@@ -13,7 +13,9 @@
 </head>
 <body>
 	<div id="container">
-		 	<c:import url="/WEB-INF/views/include/header.jsp"></c:import>
+		
+		<c:import url="/WEB-INF/views/include/header.jsp"></c:import>
+		
 		<div id="content">
 			<div id="user">
 

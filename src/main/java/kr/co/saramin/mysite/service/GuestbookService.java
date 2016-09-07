@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.saramin.mysite.dao.GuestbookDao;
 import kr.co.saramin.mysite.vo.GuestbookVo;
+import kr.co.saramin.mysite.vo.UserVo;
 
 @Service
 public class GuestbookService {
@@ -22,5 +23,16 @@ public class GuestbookService {
 		return guestbookDao.getList();
 		
 	}
+	
+	
+	
+	public void setWrite(GuestbookVo guestbookVo){
+		
+	guestbookDao.insert(guestbookVo);
+		 
+		
+	}
+	
+	
 	
 }

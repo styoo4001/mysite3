@@ -1,4 +1,4 @@
- 
+  
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -32,15 +32,15 @@
 		</div>
 		<div id="content">
 			<div id="guestbook">
-				<form action="/mysite/guestbook" method="post">
-					<input type="hidden" name="a" value="insert">
+				<form action="/mysite3/guestbook/write" method="post">
+			 
 					<table>
 						<tr>
 							<td>이름</td><td><input type="text" name="name"></td>
 							<td>비밀번호</td><td><input type="password" name="pass"></td>
 						</tr>
 						<tr>
-							<td colspan=4><textarea name="content" id="content"></textarea></td>
+							<td colspan=4><textarea name="message" id="content"></textarea></td>
 						</tr>
 						<tr>
 							<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>

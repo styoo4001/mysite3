@@ -25,19 +25,6 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-
-
-<!-- Context load listen  : 어플리케이션이 로딩이 완료가 되었을 때  서비스랑 dao autowired 사용하기 위함 -->
-
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/applicationContext.xml</param-value>
-	</context-param>
-
  
 <!--  한글처리 UTF-8 필터 -->
 	<filter>
@@ -58,6 +45,29 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>   <!--  모든 경로를 다 인코딩 .. -->
 	</filter-mapping>
+
+<!-- Context load listen  : 어플리케이션이 로딩이 완료가 되었을 때  서비스랑 dao autowired 사용하기 위함 -->
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
+	</context-param>
+
+<!-- 공통 에러 페이지 -->
+<error-page>
+	<error-code>404</error-code>
+	<location>/WEB-INF/views/error/404.jsp</location>
+</error-page>
+
+<error-page>
+	<error-code>500</error-code>
+	<location>/WEB-INF/views/error/500.jsp</location>
+</error-page>
+
 
 
 </web-app>

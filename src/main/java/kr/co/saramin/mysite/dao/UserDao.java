@@ -6,13 +6,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kr.co.saramin.mysite.exception.UserDaoException;
 import kr.co.saramin.mysite.vo.UserVo;
-
 
 @Repository
 public class UserDao {
+	
+	@Autowired
+	SqlSession sqlSession;
+	
+	
+	/*
 	private Connection getConnection() throws SQLException {
 		Connection connection = null;
 		try {
@@ -27,8 +35,13 @@ public class UserDao {
 		
 		return connection;
 	}
-	
+	*/
 	public UserVo get( UserVo vo ) {
+		
+		UserVo userVo= sqlSession.selectOne("getByEmailAndPassword" , vo);
+		
+		return userVo;
+		/*
 		UserVo userVo = null;
 		
 		Connection conn = null;
@@ -74,14 +87,27 @@ public class UserDao {
 				e.printStackTrace();
 			}
 		}
+		
+		*/
 	}
 	
-	public void insert( UserVo vo ) {
+	public void update( UserVo vo) {
+		
+		sqlSession.update("user.update" , vo);
+		
+	}
+	
+	public void insert( UserVo vo ) throws UserDaoException {
+	
+		sqlSession.insert( "user.insert" , vo);
+		
+		/*
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
 			conn = getConnection();
 			String sql = "INSERT INTO user VALUES (null, ?, ?, password(?), ? )";
+		//	String sql = "INSERT INTO user VAL (null, ?, ?, password(?), ? )";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString( 1, vo.getName() );
@@ -92,7 +118,10 @@ public class UserDao {
 			pstmt.executeUpdate();
 			
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+		//	ex.printStackTrace();
+			
+			throw new UserDaoException( ex.getMessage());
+			
 		} finally {
 			try{
 				if( pstmt != null ) {
@@ -105,5 +134,7 @@ public class UserDao {
 				e.printStackTrace();
 			}
 		}
+		
+		*/
 	}	
 }

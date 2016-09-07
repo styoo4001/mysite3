@@ -6,29 +6,22 @@ import org.springframework.stereotype.Service;
 import kr.co.saramin.mysite.dao.UserDao;
 import kr.co.saramin.mysite.vo.UserVo;
 
-
-
 @Service
 public class UserService {
-
-
 	@Autowired
 	private UserDao userDao;
-	public void join ( UserVo userVo) {
-		
-		
-		
-		userDao.insert( userVo);
-		
-		System.out.println("User Service: join()");
+	
+	public void join( UserVo userVo ) {
+		userDao.insert( userVo );
 	}
 	
-	public UserVo login ( UserVo userVo){
-		
-		return userDao.get(userVo);
-		
-		
+	public UserVo login( UserVo userVo ){
+		return userDao.get( userVo );
 	}
 	
-	
+	public void modifyUser( UserVo userVo){
+		
+		
+		 userDao.update(userVo);
+	}
 }

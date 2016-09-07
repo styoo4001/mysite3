@@ -9,15 +9,24 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import kr.co.saramin.mysite.vo.GuestbookVo;
 
-
-
 @Repository
 public class GuestbookDao {
 
+	@Autowired
+	SqlSession sqlSession;
+	
+	@Autowired  // 데이타 소스( 이부분이 jdbc 연결 부분.. 빈 처리 한걸 자동으로 생성한다. 서비스 처럼..) 
+	DataSource dataSource;
+	
+	/*
 	private Connection getConnection() throws SQLException {
 		Connection connection = null;
 		try {
@@ -32,18 +41,20 @@ public class GuestbookDao {
 		
 		return connection;
 	}
-	
+	*/
 	public GuestbookVo get( Long no ) {
 		
-		GuestbookVo vo = null;
+		GuestbookVo vo=sqlSession.selectOne("getByNo",no);
+		return vo;
+		/*GuestbookVo vo = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
-			String sql = "SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message from guestbook where no = ?";
+			String sql = "SELECt no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message from guestbook where no = ?";
 			pstmt = conn.prepareStatement( sql );
 			
 			pstmt.setLong( 1, no ); 
@@ -77,13 +88,19 @@ public class GuestbookDao {
 				ex.printStackTrace();
 			}
 		}
-	}
+*/	
+		}
 	
-	public void insert( GuestbookVo vo ) {
+	public int insert( GuestbookVo vo ) {
+		
+		int count= sqlSession.insert("guestbook.insert" , vo);
+		System.out.println(vo.getNo());
+		
+	/*	int count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try{
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			String sql = "INSERT INTO guestbook VALUES( null, ?, now(), ?, password(?) )";
 			pstmt = conn.prepareStatement( sql );
@@ -92,7 +109,7 @@ public class GuestbookDao {
 			pstmt.setString( 2, vo.getMessage() );
 			pstmt.setString( 3, vo.getPassword() );
 
-			pstmt.executeUpdate();
+			count = pstmt.executeUpdate();
 			
 		} catch( SQLException ex ) {
 			ex.printStackTrace();
@@ -108,18 +125,25 @@ public class GuestbookDao {
 				ex.printStackTrace();
 			}
 		}
+*/		
+		return count;
 	}
 	
-	public void delete( GuestbookVo vo ) {
+	public int delete( GuestbookVo vo ) {
+		
+		int count= sqlSession.delete("delete", vo);
+		
+	/*	
+		int count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try{
-			conn = getConnection();
-			String sql = "DELETE FROM guestbook WHERE no = ? AND passwd = password(?)";
+			conn = dataSource.getConnection();
+			String sql = "DELETE FROM guestbook WHERE no = ? AND password = password(?)";
 			pstmt = conn.prepareStatement( sql );
 			pstmt.setLong( 1,  vo.getNo() );
 			pstmt.setString( 2, vo.getPassword() );
-			pstmt.executeUpdate();
+			count = pstmt.executeUpdate();
 		} catch( SQLException ex ) {
 			ex.printStackTrace();
 		} finally {
@@ -134,17 +158,23 @@ public class GuestbookDao {
 				ex.printStackTrace();
 			}
 		}
+	*/	
+		return count;
 	}
 	
 	public List<GuestbookVo> getList() {
-		List<GuestbookVo> list = new ArrayList<GuestbookVo>();
+	//	List<GuestbookVo> list = new ArrayList<GuestbookVo>();
+	
+		List<GuestbookVo> list =sqlSession.selectList("guestbook.getList");
+		
+		/*
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			stmt = conn.createStatement();
-			String sql = "SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message from guestbook ORDER BY reg_date desc";
+			String sql = "SELET no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message from guestbook ORDER BY reg_date desc";
 			rs = stmt.executeQuery( sql );
 			while( rs.next() ) {
 				Long no = rs.getLong( 1 );
@@ -162,6 +192,7 @@ public class GuestbookDao {
 			}
 		} catch( SQLException ex ) {
 			System.out.println( "error: " + ex);
+			ex.printStackTrace();
 		} finally {
 			try{
 				if( rs != null ) {
@@ -177,7 +208,7 @@ public class GuestbookDao {
 				ex.printStackTrace();
 			}
 		}
-			
+			*/
 		return list;
 	}
 }

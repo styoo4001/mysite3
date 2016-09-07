@@ -4,74 +4,98 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.saramin.mysite.exception.UserDaoException;
 import kr.co.saramin.mysite.service.UserService;
 import kr.co.saramin.mysite.vo.UserVo;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping( "/user" )
 public class UserController {
-	
 	@Autowired
 	UserService userService;
-
-	@RequestMapping(" /joinform")
+	
+	@RequestMapping( "/joinform" )
 	public String joinform(){
-		
-		return "/WEB-INF/views/user/joinform.jsp";
+		return "/user/joinform";
 	}
 	
-	@RequestMapping(" /loginform")
-	public String loginform(){
-	
-	
-		
-		return "/WEB-INF/views/user/loginform.jsp";
-	}
-	
-	
-	
-	@RequestMapping( value= "/join", method=RequestMethod.POST)
-
-	public String join (@ModelAttribute UserVo userVo){
-		
-		
-		userService.join( userVo);
+	@RequestMapping( value="/join", method=RequestMethod.POST )
+	public String join(
+		@ModelAttribute UserVo userVo ) {
+		userService.join( userVo );
 		return "redirect:/user/loginform";
 	}
 	
+	@RequestMapping( "/loginform" )
+	public String loginform(){
+		return "/user/loginform";
+	}
 	
-
-	@RequestMapping( value= "/login", method=RequestMethod.POST)
-
-	public String login (  HttpSession session,   @ModelAttribute UserVo userVo){
-		
-		
-		UserVo authUser = userService.login(userVo);
-		if( authUser == null){
+	@RequestMapping( "/login" )
+	public String login( HttpSession session, @ModelAttribute UserVo userVo){
+		UserVo authUser = userService.login( userVo );
+		if( authUser == null ) {
 			return "redirect:/user/loginform?result=fail";
 		}
 		
-		
 		//인증처리
+		session.setAttribute( "authUser", authUser );
 		
-		session.setAttribute("authUser",  authUser);
-		
-		//userService.login( userVo);
+		// 리다렉션
+		return "redirect:/index";
+	}
+	
+	@RequestMapping( "/logout" )
+	public String logout( HttpSession session ){
+		session.removeAttribute( "authUser" );
+		session.invalidate();
 		
 		return "redirect:/index";
 	}
 	
-	@RequestMapping("/logout")
-	public String logout(HttpSession session){
+	
+	@RequestMapping( "/update" )
+	public String update( HttpSession session ){
+		UserVo authUser= (UserVo)session.getAttribute( "authUser" );
 		
-		session.removeAttribute("authUser");
-		session.invalidate();
+		if ( authUser==null){
+			
+			return "redirect:/index";
+			
+		}
+		
+		UserVo userVo= new UserVo();
+		userVo.setNo( authUser.getNo() );
+		userVo.setName( "사람인" );
+		userVo.setGender( "FEMALE" );
+		userVo.setPassword("");
+		userService.modifyUser(userVo);
+		
 		return "redirect:/index";
 	}
+	
+	
+	
+	/*
+	@ExceptionHandler( UserDaoException.class )
+	public String handleUserDaoException(  Exception ex) {
+		
+		System.out.println(" loggin: " + ex);
+		return "error/500";
+	}
+*/
+	
+	@ExceptionHandler( UserDaoException.class )
+	public String handleUserDaoException(  Exception ex) {
+		
+		System.out.println(" loggin: " + ex);
+		return "error/500";
+	}
+	
 	
 }

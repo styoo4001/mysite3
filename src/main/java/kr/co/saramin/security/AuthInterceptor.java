@@ -52,7 +52,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		}
 		
 		// 이제 다 인증된 사용자..
-		
+		System.out.println("인증완료");
 		return true;
 	//	return super.preHandle(request, response, handler);
 	}

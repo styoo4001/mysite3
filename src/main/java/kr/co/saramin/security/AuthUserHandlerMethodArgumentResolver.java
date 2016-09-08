@@ -52,7 +52,7 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-
+		System.out.println("11");
 		// 파라미터로 넘어온게 AuthUser가 아니라 다른거면 
 		if( parameter.getParameterAnnotation( AuthUser.class ) ==null){
 			
@@ -67,7 +67,7 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 			
 		}
 		
-		return false;
+		return true;
 	}
 
 }

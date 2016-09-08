@@ -12,6 +12,8 @@ public class MainController {
 
 	@RequestMapping( "/index" )
 	public String index() {
+		
+		System.out.println(" hollo jrebel");
 		return "main/index";
 	}
 	

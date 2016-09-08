@@ -72,8 +72,8 @@ public class UserController {
 	public String updateform( @AuthUser UserVo authUser, Model model ){
 	
 		System.out.println(authUser);
-	//	UserVo userVo= userService.getUser(authUser.getNo());
-	//	model.addAllAttributes("userVo", userVo);
+		UserVo userVo= userService.getUser(authUser.getNo());
+		model.addAttribute("userVo", userVo);
 		
 		return "user/updateform";
 	}
@@ -81,6 +81,16 @@ public class UserController {
 	
 	@Auth
 	@RequestMapping( "/update" )
+	public String update( @AuthUser UserVo authUser , @ModelAttribute UserVo userVo ){
+		
+		userVo.setNo(authUser.getNo());
+		userService.modifyUser(userVo);
+		
+		return "redirect:/index";
+	}
+	
+	
+	/*
 	public String update( HttpSession session ){
 		UserVo authUser= (UserVo)session.getAttribute( "authUser" );
 		
@@ -99,7 +109,7 @@ public class UserController {
 		
 		return "redirect:/index";
 	}
-	
+	*/
 	
 	
 	/*

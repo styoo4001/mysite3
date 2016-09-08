@@ -29,4 +29,9 @@ public class UserService {
 		
 		return userDao.get(email);
 	}
+	
+	public UserVo getUser ( Long no){
+		
+		return userDao.get(no);
+	}
 }

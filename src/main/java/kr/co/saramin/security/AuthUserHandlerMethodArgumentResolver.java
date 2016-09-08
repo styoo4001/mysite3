@@ -28,6 +28,7 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 			WebDataBinderFactory arg3) 
 					throws Exception {
 
+		System.out.println("1");
 		if(supportsParameter(parameter)== false){
 			return WebArgumentResolver.UNRESOLVED;
 		}
@@ -38,11 +39,14 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 		HttpServletRequest request= webRequest.getNativeRequest(HttpServletRequest.class);
 		
 		HttpSession session = request.getSession();
-		
+
+		System.out.println("2");
 		if( session ==null) {
 			return WebArgumentResolver.UNRESOLVED;
 		}
-		
+
+		System.out.println("3");
+		System.out.println("return authUser"+session.getAttribute("authUser"));
 		return session.getAttribute("authUser");
 	}
 
@@ -54,7 +58,8 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 			
 			return false;
 		}
-		
+
+		System.out.println("4");
 		// 파라미터의 타입 그러니까 authuser의 타입( Uservo ) 가 아니면 ..
 		if(parameter.getParameterType().equals( UserVo.class.toString()) ==false ){
 			

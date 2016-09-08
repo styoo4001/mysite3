@@ -44,6 +44,14 @@
 	</select>
 
 
+	<select id="getByNo" parameterType="long"
+		resultType="uservo">
+	
+	<![CDATA[ SELECT no, name , email, gender  FROM user WHERE no=#{no} ]]>
+
+	</select>
+
+
 
 
 </mapper>

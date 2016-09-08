@@ -11,28 +11,39 @@
 	(null, #{name}, #{email}, password(#{password}), #{gender} )
 	]]>
 	</insert>
-	
-	<select id="getByEmailAndPassword"  parameterType="uservo"  resultType="uservo">
+
+	<select id="getByEmailAndPassword" parameterType="uservo"
+		resultType="uservo">
 	
 	<![CDATA[ SELECT no, name FROM user WHERE email=#{email} AND passwd=password(#{password}) ]]>
-	
+
 	</select>
 
-<update id="update" parameterType="uservo" >
+	<update id="update" parameterType="uservo">
 
-	 
-		update user set 
+
+		update user set
 		name=#{name} ,
 		<if test="password != null and password != ''">
-		passwd= password(#{password}),
+			passwd= password(#{password}),
 		</if>
 		gender = #{gender}
 		where no = #{no}
-		
-		
-	 
 
-</update>
+
+
+
+	</update>
+
+
+	<select id="getByEmail" parameterType="string"
+		resultType="uservo">
+	
+	<![CDATA[ SELECT no, name FROM user WHERE email=#{email} ]]>
+
+	</select>
+
+
 
 
 </mapper>

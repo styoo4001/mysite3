@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import kr.co.saramin.mysite.exception.UserDaoException;
 import kr.co.saramin.mysite.service.UserService;
 import kr.co.saramin.mysite.vo.UserVo;
+import kr.co.saramin.security.annotation.Auth;
+import kr.co.saramin.security.annotation.AuthUser;
 
 @Controller
 @RequestMapping( "/user" )
@@ -36,6 +39,8 @@ public class UserController {
 		return "/user/loginform";
 	}
 	
+	
+	/*
 	@RequestMapping( "/login" )
 	public String login( HttpSession session, @ModelAttribute UserVo userVo){
 		UserVo authUser = userService.login( userVo );
@@ -49,7 +54,9 @@ public class UserController {
 		// 리다렉션
 		return "redirect:/index";
 	}
+	*/
 	
+	/*
 	@RequestMapping( "/logout" )
 	public String logout( HttpSession session ){
 		session.removeAttribute( "authUser" );
@@ -57,8 +64,22 @@ public class UserController {
 		
 		return "redirect:/index";
 	}
+	*/
 	
 	
+	@Auth
+	@RequestMapping("/updateform")
+	public String updateform( @AuthUser UserVo authUser, Model model ){
+	
+		System.out.println(authUser);
+	//	UserVo userVo= userService.getUser(authUser.getNo());
+	//	model.addAllAttributes("userVo", userVo);
+		
+		return "user/updateform";
+	}
+	
+	
+	@Auth
 	@RequestMapping( "/update" )
 	public String update( HttpSession session ){
 		UserVo authUser= (UserVo)session.getAttribute( "authUser" );

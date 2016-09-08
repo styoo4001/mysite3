@@ -36,6 +36,14 @@ public class UserDao {
 		return connection;
 	}
 	*/
+	
+	
+	public UserVo get( String email){
+		
+		UserVo uservo= sqlSession.selectOne("user.getByEmail" , email);
+		return uservo;
+	}
+	
 	public UserVo get( UserVo vo ) {
 		
 		UserVo userVo= sqlSession.selectOne("getByEmailAndPassword" , vo);

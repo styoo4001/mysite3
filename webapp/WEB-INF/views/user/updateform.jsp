@@ -11,63 +11,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="<%=request.getContextPath() %>/assets/css/user.css" rel="stylesheet" type="text/css">
 
-
-<script type="text/javascript" src="<%=request.getContextPath() %>/assets/js/jquery/jquery-1.9.0.js" ></script>
-
-<script>
-
-
  
-$(function(){
-	   
-//	$("input[type='button']").click(function(){
-	$("#emailcheck").click(function(){
-		
-		 
-		
-		var email= $("#email").val();
-		
-		if(email==""){
-			
-			return;
-		}
-		
-		$.ajax({
-			
-		 
-			url: "${pageContext.request.contextPath}/user/api/checkemaildto?email="+email,
-			type: "get",
-			dataType: "json",
-			data: "",
-			//contentType: "applicatipn/json"
-			success: function(response){
-				
-				if(response.result=="fail"){
-				
-					console.error( response.message);
-					return;
-					
-				}
-				if(response.data==false){
-				
-					alert("사용중입니다");
-					return;
-				
-				}
-			},
-			error: function(jqXHR, status, error){
-				console.log(status+ ":" +error);
-			}
-		});
-		
-	 
-	});
-	
-});
-
-
-</script>
-
 
 
 </head>

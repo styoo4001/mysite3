@@ -24,4 +24,9 @@ public class UserService {
 		
 		 userDao.update(userVo);
 	}
+	
+	public UserVo getUser ( String email){
+		
+		return userDao.get(email);
+	}
 }

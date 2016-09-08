@@ -2,18 +2,51 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns="http://www.springframework.org/schema/beans"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	xmlns:mvc="http://www.springframework.org/schema/mvc">
 
 
 	<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 햔들러 -->
 	<mvc:default-servlet-handler />
 
+
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!-- viewResolve 가 스트링과 모델엔뷰는 디폴트로 주지만 메세지 컨버터를 등록해주면 이중에 있는것으로 컨버터 해서 
+				보내줌.. -->
+
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+
+
+		</mvc:message-converters>
+
+		<!-- argument resolver -->
+		<mvc:argument-resolvers>
+			<bean
+				class="kr.co.saramin.security.AuthUserHandlerMethodArgumentResolver" />
+		</mvc:argument-resolvers>
+
+
+	</mvc:annotation-driven>
 
 
 	<context:annotation-config />
@@ -29,8 +62,36 @@
 			value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/WEB-INF/views/" />  <!-- 앞에 붙어있는부분 -->
 		<property name="suffix" value=".jsp" />   <!-- 뒤에 붙어있는부분 -->
-		<property name="order" value="1" />  <!--  뷰 리졸버를 여러개 선언할수있다. 그때 실행순서 -->
+		<property name="order" value="1" />  <!-- 뷰 리졸버를 여러개 선언할수있다. 그때 실행순서 -->
 	</bean>
+
+
+	<!-- Interceptors -->  <!-- 인터셉터가 여러개 있으면 이걸 여러개 설정하면 됨.. -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/guestbook/**" />
+			<bean class="kr.co.saramin.mysite.interceptor.MyInterceptor2" />
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/user/login" />
+			<bean class="kr.co.saramin.security.AuthLoginInterceptor" />
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/user/logout" />
+			<bean class="kr.co.saramin.security.AuthLogoutInterceptor" />
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/assets/**" />
+			<bean class="kr.co.saramin.security.AuthInterceptor" />
+		</mvc:interceptor>
+
+
+
+	</mvc:interceptors>
 
 
 

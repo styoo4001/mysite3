@@ -44,4 +44,11 @@ public class GuestbookController {
 	}
 
 
+	@RequestMapping( "/ajax" )
+	public String index( ) {
+		return "/guestbook/ajax";
+	}
+	
+	
+
 }

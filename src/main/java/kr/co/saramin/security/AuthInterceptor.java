@@ -32,6 +32,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		// @Auth 가 안달린 핸들러 메서드
 		
 		if( auth==null){
+			System.out.println("not auth");
 			return true;
 		}
 		// 접근 제어

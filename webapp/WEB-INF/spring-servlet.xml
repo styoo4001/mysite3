@@ -13,6 +13,11 @@
 	<mvc:default-servlet-handler />
 
 
+	<!-- the mvc resources tag does the magic -->
+	<mvc:resources mapping="/upload-images/**" location="file:/upload/" />
+
+
+
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
 		<mvc:message-converters>
@@ -41,8 +46,7 @@
 
 		<!-- argument resolver -->
 		<mvc:argument-resolvers>
-			<bean
-				class="kr.co.saramin.security.AuthUserHandlerMethodArgumentResolver" />
+			<bean class="kr.co.saramin.security.AuthUserHandlerMethodArgumentResolver" />
 		</mvc:argument-resolvers>
 
 
@@ -66,7 +70,24 @@
 	</bean>
 
 
+	<!-- 멀티파트 리졸버 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+		<!-- 최대업로드 가능한 바이트크기 -->
+		<property name="maxUploadSize" value="52428800" />
+
+		<!-- 디스크에 임시 파일을 생성하기 전에 메모리에 보관할수있는 최대 바이트 크기 -->
+		<!-- property name="maxInMemorySize" value="52428800" / -->
+
+		<!-- defaultEncoding -->
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>
+
+
 	<!-- Interceptors -->  <!-- 인터셉터가 여러개 있으면 이걸 여러개 설정하면 됨.. -->
+
+
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/guestbook/**" />
@@ -88,11 +109,19 @@
 			<mvc:exclude-mapping path="/assets/**" />
 			<bean class="kr.co.saramin.security.AuthInterceptor" />
 		</mvc:interceptor>
-
-
-
+ 
 	</mvc:interceptors>
 
 
+
+		<!-- 6. MessageSource -->
+		<bean id="messageSource"
+			class="org.springframework.context.support.ResourceBundleMessageSource">
+			<property name="basenames">
+				<list>
+					<value>messages/messages_ko</value>
+				</list>
+			</property>
+		</bean>
 
 </beans>

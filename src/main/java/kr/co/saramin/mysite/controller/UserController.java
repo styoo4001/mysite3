@@ -1,10 +1,16 @@
 package kr.co.saramin.mysite.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +35,19 @@ public class UserController {
 	
 	@RequestMapping( value="/join", method=RequestMethod.POST )
 	public String join(
-		@ModelAttribute UserVo userVo ) {
+		@ModelAttribute @Valid UserVo userVo , BindingResult result ) {
+		
+		if( result.hasErrors()){
+			
+			List<ObjectError> list= result.getAllErrors();
+			
+			for (ObjectError o : list){
+				System.out.println("object error" + o);
+			}
+			
+			return "redirect:/user/joinform"; 
+		}
+		
 		userService.join( userVo );
 		return "redirect:/user/loginform";
 	}
@@ -69,7 +87,8 @@ public class UserController {
 	
 	@Auth
 	@RequestMapping("/updateform")
-	public String updateform( @AuthUser UserVo authUser, Model model ){
+	public String updateform( @AuthUser UserVo authUser, Model model ){  
+		// Model model 이렇게 하면 뷰에 같이 값을 넘긴다 자동으로..좋네 이건.
 	
 		System.out.println(authUser);
 		UserVo userVo= userService.getUser(authUser.getNo());

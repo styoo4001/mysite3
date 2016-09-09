@@ -14,7 +14,7 @@ public class MyInterceptor2 extends HandlerInterceptorAdapter {
 		
 		
 		System.out.println("myinterceptor2 pre call");
-		return false;
+		return true;
 		//return super.preHandle(request, response, handler);
 	}
 

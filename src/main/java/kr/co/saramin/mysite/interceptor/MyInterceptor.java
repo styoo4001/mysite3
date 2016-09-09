@@ -28,7 +28,7 @@ public class MyInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
 
 		System.out.println("MyInterceptor. preHandle called");
-		return false;
+		return true;
 	}
 
 }
